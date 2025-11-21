@@ -1,5 +1,6 @@
 """
 Copy of random bot but I changed a lot
+
 """
 from typing import List, Dict, Any
 import random
@@ -31,16 +32,17 @@ class aydenbot(PokerBotAPI):
 
 
 
-    def _preflop_strategy(self, game_state: GameState, hole_cards: List[Card], 
-                   legal_actions: List[PlayerAction], min_bet: int, max_bet: int) -> tuple:
+    def _preflop_strategy(self, game_state: GameState, hole_cards: List[Card], legal_actions: List[PlayerAction], 
+                          min_bet: int, max_bet: int) -> tuple:
 
         if random.random() > self.play_frequency:
                 if PlayerAction.CHECK in legal_actions:
                     return PlayerAction.CHECK, 0
                 return PlayerAction.FOLD, 0
+        
 
     def _postflop_strategy(self, game_state: GameState, hole_cards: List[Card], 
-                   legal_actions: List[PlayerAction], min_bet: int, max_bet: int) -> tuple:
+                           legal_actions: List[PlayerAction], min_bet: int, max_bet: int) -> tuple:
                 
         all_cards = hole_cards + game_state.community_cards
         hand_type, _, _ = HandEvaluator.evaluate_best_hand(all_cards)
