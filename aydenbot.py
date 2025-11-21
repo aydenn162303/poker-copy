@@ -37,7 +37,7 @@ class AydenBot(PokerBotAPI):
     def _preflop_strategy(self, game_state: GameState, hole_cards: List[Card], legal_actions: List[PlayerAction], 
                           min_bet: int, max_bet: int) -> tuple:
         """Strategy for pre-flop betting"""
-        if len(hole_cards) != 2:
+        if len(hole_cards) != 2 and random.random() < self.fold_frequency:
             return PlayerAction.FOLD, 0
         
         card1, card2 = hole_cards
@@ -89,7 +89,11 @@ class AydenBot(PokerBotAPI):
         # Decent hand (pair)
         if hand_rank >= HandEvaluator.HAND_RANKINGS['pair']:
             if PlayerAction.CHECK in legal_actions:
-                return PlayerAction.CHECK, 0
+                if randomint(0,1) == 0:
+                    return PlayerAction.CHECK, 0
+                else:
+                    raise_amount = min(1.5 * game_state.big_blind, max_bet) 
+                    return PlayerAction.RAISE, raise_amount
             # Call small bets
             to_call = game_state.current_bet - game_state.player_bets[self.name]
             if PlayerAction.CALL in legal_actions and to_call < game_state.pot / 4:
@@ -139,3 +143,14 @@ class AydenBot(PokerBotAPI):
         if self.hands_played > 0 and self.hands_played % 25 == 0:
             win_rate = self.hands_won / self.hands_played
             self.logger.info(f"Ayden play: {self.hands_won}/{self.hands_played} wins ({win_rate:.2%})")
+
+    def tournament_start(self, players: List[str], starting_chips: int):
+        super().tournament_start(players, starting_chips)
+        if len(players) <= 4:
+            self.raise_frequency = 0.6
+            self.play_frequency = 0.9
+            self.fold_frequency = 0.3
+        elif len(players) >= 8:
+            self.raise_frequency = 0.4
+            self.play_frequency = 0.7
+            self.fold_frequency = 0.7 #could cause issues later
