@@ -1,11 +1,11 @@
 """
 Copy of random bot but I changed a lot
 """
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 import random
 
-from bot_api import PokerBotAPI, PlayerAction
-from engine.cards import Card
+from bot_api import PokerBotAPI, PlayerAction, GameInfoAPI
+from engine.cards import Card, Rank, HandEvaluator
 from engine.poker_game import GameState
 
 
@@ -40,7 +40,7 @@ class aydenbot(PokerBotAPI):
         # If raising, choose a random valid amount
         if action == PlayerAction.RAISE:
             # More realistic random raise - between min raise and pot size
-            max_raise = min(game_state.pot * 3, max_bet) # Raise up to 1.5x pot
+            max_raise = min(game_state.pot * 2.5, max_bet) # Raise up to 1.5x pot
             if max_raise < min_bet:
                 max_raise = min_bet
                 
