@@ -11,10 +11,6 @@ from engine.poker_game import GameState
 
 
 class aydenbot(PokerBotAPI):
-    """
-    A simple bot that makes random legal decisions.
-    Useful for testing the tournament system.
-    """
     
     def __init__(self, name: str):
         super().__init__(name)
@@ -45,7 +41,7 @@ class aydenbot(PokerBotAPI):
 
     def _preflop_strategy(self, game_state: GameState, hole_cards: List[Card], legal_actions: List[PlayerAction], 
                             min_bet: int, max_bet: int) -> tuple:
-            """Strategy for pre-flop betting"""
+                            
             if len(hole_cards) != 2:
                 return PlayerAction.FOLD, 0
             
