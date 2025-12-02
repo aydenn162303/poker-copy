@@ -1,5 +1,5 @@
 """
-Copy of random bot but I changed a lot
+Copy of random bot & conservative bot but I changed a lot
 
 """
 from typing import List, Dict, Any
