@@ -5,8 +5,8 @@
     "('conservative_bot', 0, 3)",
     "('random_bot', 0, 4)"
   ],
-  "tournament_duration": 0.4777836799621582,
-  "total_hands": 85,
+  "tournament_duration": 0.4811539649963379,
+  "total_hands": 65,
   "settings": {
     "starting_chips": 1000,
     "tournament_type": "freeze_out",
@@ -22,9 +22,9 @@
       "max_timeouts": 3
     },
     "aydensevilbot": {
-      "error_count": 5,
+      "error_count": 0,
       "timeout_count": 0,
-      "is_disqualified": true,
+      "is_disqualified": false,
       "max_errors": 5,
       "max_timeouts": 3
     },

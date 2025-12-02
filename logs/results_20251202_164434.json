@@ -1,12 +1,12 @@
 {
   "final_standings": [
     "('aggressive_bot', 4000, 1)",
-    "('aydensevilbot', 0, 2)",
-    "('conservative_bot', 0, 3)",
+    "('conservative_bot', 0, 2)",
+    "('aydensevilbot', 0, 3)",
     "('random_bot', 0, 4)"
   ],
-  "tournament_duration": 0.5017521381378174,
-  "total_hands": 75,
+  "tournament_duration": 0.9436233043670654,
+  "total_hands": 170,
   "settings": {
     "starting_chips": 1000,
     "tournament_type": "freeze_out",

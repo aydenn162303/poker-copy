@@ -5,8 +5,8 @@
     "('conservative_bot', 0, 3)",
     "('random_bot', 0, 4)"
   ],
-  "tournament_duration": 0.4633605480194092,
-  "total_hands": 73,
+  "tournament_duration": 0.3056950569152832,
+  "total_hands": 50,
   "settings": {
     "starting_chips": 1000,
     "tournament_type": "freeze_out",
