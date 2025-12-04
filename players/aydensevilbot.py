@@ -75,6 +75,8 @@ class aydenbot(PokerBotAPI):
                 raise_amount = max(raise_amount, min_bet)
                 return PlayerAction.RAISE, raise_amount
             
+            #return random.choice(legal_actions), 0 ## REMOVE?
+    
             if PlayerAction.CALL in legal_actions:
                 return PlayerAction.CALL, 0
 
@@ -95,15 +97,17 @@ class aydenbot(PokerBotAPI):
         queen = 0
         jack = 0
         self.goodenoughhand = False
-        for card in all_cards: #probably need this for later too
-            if card.rank == Rank.ACE: ace += 1
-            if card.rank == Rank.KING: king += 1
-            if card.rank == Rank.QUEEN: queen += 1
-            if card.rank == Rank.JACK: jack += 1
 
-        if ace > 1 or king > 1 or queen > 1 or jack > 1:
-            self.goodenoughhand = True
-            print("good enough pair ---------" + str(ace) + str(king) + str(queen) + str(jack))
+        if hand_rank == HandEvaluator.HAND_RANKINGS['pair']:
+            for card in all_cards: #probably need this for later too
+                if card.rank == Rank.ACE: ace += 1
+                if card.rank == Rank.KING: king += 1
+                if card.rank == Rank.QUEEN: queen += 1
+                if card.rank == Rank.JACK: jack += 1
+
+            if ace > 1 or king > 1 or queen > 1 or jack > 1:
+                self.goodenoughhand = True
+                print("good enough pair ---------" + str(ace) + str(king) + str(queen) + str(jack))
 
 
         # better than 2 pair
@@ -116,13 +120,10 @@ class aydenbot(PokerBotAPI):
                 action = PlayerAction.CHECK
             else:
                 action = random.choice(legal_actions)
-        elif self.goodenoughhand == True and hand_rank == HandEvaluator.HAND_RANKINGS['pair']: #specifically high card pairs
+        elif self.goodenoughhand == True: #specifically high card pairs
             print("PAIR THAT IS GOOD MAYBE" + str(all_cards))
             if PlayerAction.RAISE in legal_actions:
                 action = PlayerAction.RAISE
-            elif PlayerAction.ALL_IN in legal_actions: #60% all in
-                print("ALL IN LETs GOO")
-                action = PlayerAction.ALL_IN
             elif PlayerAction.CALL in legal_actions:
                 action = PlayerAction.CALL
             elif PlayerAction.CHECK in legal_actions:
@@ -149,7 +150,10 @@ class aydenbot(PokerBotAPI):
             return action, amount
         
         # All other actions don't need an amount
-        return action, 0
+        if action in legal_actions: #backup
+            return action, 0
+        else:
+            return random.choice(legal_actions), 0
     
 
 
