@@ -122,43 +122,60 @@ def run_many(num_tournaments=1000):
     except Exception as e:
         print(f"\nError during execution: {e}")
         
-    end_time = time.time()
-    duration = end_time - start_time
-    
-    num_runs = sum(win_counts.values())
-    
-    print("\n" + "="*115)
-    print(f"AGGREGATE RESULTS ({num_runs} tournaments run)")
-    print("="*115)
-    print(f"Total Duration: {duration:.2f}s ({duration/num_runs:.2f}s per run)")
-    print(f"Avg Hands per Tournament: {total_hands_played / num_runs:.1f}")
-    print("-" * 115)
-    print(f"{ 'Bot Name':<30} | {'Earnings':<12} | {'Points':<8} | {'Avg Pts':<8} | {'Podium':<8} | {'Wins':<8} | {'Win %':<8} | {'DQ':<5}")
-    print("-" * 115)
-    
-    # Sort by Earnings
-    sorted_bots = total_earnings.most_common()
-    
-    # Include bots that have 0 points (if any, e.g. always last place or DQ'd before play)
-    all_bots = set(disqualified_counts.keys()) | set(total_points.keys())
-    for bot in all_bots:
-        if bot not in total_earnings:
-            sorted_bots.append((bot, 0))
+    try:
+        end_time = time.time()
+        duration = end_time - start_time
+        
+        num_runs = sum(win_counts.values())
+        
+        if num_runs == 0:
+            print("No tournaments completed.")
+            return
+
+        print("\n" + "="*115)
+        print(f"AGGREGATE RESULTS ({num_runs} tournaments run)")
+        print("="*115)
+        print(f"Total Duration: {duration:.2f}s ({duration/num_runs:.2f}s per run)")
+        if num_runs > 0:
+            print(f"Avg Hands per Tournament: {total_hands_played / num_runs:.1f}")
+        print("-" * 115)
+        print(f"{ 'Bot Name':<30} | {'Earnings':<12} | {'Points':<8} | {'Avg Pts':<8} | {'Podium':<8} | {'Wins':<8} | {'Win %':<8} | {'DQ':<5}")
+        print("-" * 115)
+        
+        # Sort by Earnings
+        sorted_bots = total_earnings.most_common()
+        
+        # Include bots that have 0 points (if any, e.g. always last place or DQ'd before play)
+        all_bots = set(disqualified_counts.keys()) | set(total_points.keys())
+        for bot in all_bots:
+            if bot not in total_earnings:
+                sorted_bots.append((bot, 0))
+                
+        # Re-sort to be sure if we appended
+        sorted_bots.sort(key=lambda x: x[1], reverse=True)
+        
+        for bot_name, earnings in sorted_bots:
+            wins = win_counts[bot_name]
+            win_rate = (wins / num_runs) * 100 if num_runs > 0 else 0
+            points = total_points[bot_name]
+            avg_points = points / num_runs if num_runs > 0 else 0
+            p_points = podium_points[bot_name]
+            dqs = disqualified_counts[bot_name]
             
-    # Re-sort to be sure if we appended
-    sorted_bots.sort(key=lambda x: x[1], reverse=True)
-    
-    for bot_name, earnings in sorted_bots:
-        wins = win_counts[bot_name]
-        win_rate = (wins / num_runs) * 100 if num_runs > 0 else 0
-        points = total_points[bot_name]
-        avg_points = points / num_runs if num_runs > 0 else 0
-        p_points = podium_points[bot_name]
-        dqs = disqualified_counts[bot_name]
-        
-        earnings_str = f"{earnings:,}"
-        
-        print(f"{bot_name:<30} | {earnings_str:<12} | {points:<8} | {avg_points:<8.2f} | {p_points:<8} | {wins:<8} | {win_rate:>7.1f}% | {dqs:<5}")
+            earnings_str = f"{earnings:,}"
+            
+            print(f"{bot_name:<30} | {earnings_str:<12} | {points:<8} | {avg_points:<8.2f} | {p_points:<8} | {wins:<8} | {win_rate:>7.1f}% | {dqs:<5}")
+    except KeyboardInterrupt:
+        print("\nOutput interrupted.")
 
 if __name__ == "__main__":
-    run_many(1000)
+    import argparse
+    parser = argparse.ArgumentParser(description='Run multiple poker tournaments.')
+    parser.add_argument('-n', '--count', type=int, default=1000, help='Number of tournaments to run')
+    args = parser.parse_args()
+    
+    try:
+        run_many(args.count)
+    except KeyboardInterrupt:
+        print("\nScript interrupted by user.")
+        sys.exit(0)
