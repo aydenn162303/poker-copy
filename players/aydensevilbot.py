@@ -77,8 +77,9 @@ class aydenbot(PokerBotAPI):
             
             if PlayerAction.CALL in legal_actions:
                 return PlayerAction.CALL, 0
-                
-            return PlayerAction.CHECK, 0
+
+            if PlayerAction.CHECK in legal_actions:   
+                return PlayerAction.CHECK, 0
 
 
 
