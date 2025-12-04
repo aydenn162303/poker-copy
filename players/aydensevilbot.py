@@ -27,14 +27,7 @@ class aydenbot(PokerBotAPI):
         self.good_suited_connectors = [
             (Rank.KING, Rank.JACK), (Rank.QUEEN, Rank.JACK), (Rank.JACK, Rank.TEN),
             (Rank.TEN, Rank.NINE), (Rank.NINE, Rank.EIGHT)
-        ]  
-        self.high_pairs = [
-            (Rank.KING, Rank.KING), (Rank.QUEEN, Rank.QUEEN), (Rank.JACK, Rank.JACK),
-            (Rank.TEN, Rank.TEN)
         ]
-
-
-
     
 
     def get_action(self, game_state: GameState, hole_cards: List[Card], 
@@ -133,18 +126,13 @@ class aydenbot(PokerBotAPI):
             else:
                 action = random.choice(legal_actions)
         else:
-            # original (reset if win rate goes down)
-            # action = random.choice(legal_actions)
-            if PlayerAction.FOLD in legal_actions:
-                action = PlayerAction.FOLD
-            else:
-                action = random.choice(legal_actions)
+            action = random.choice(legal_actions)
 
 
         # If raising, choose a random valid amount
         if action == PlayerAction.RAISE:
             # More realistic random raise - between min raise and pot size
-            max_raise = min(game_state.pot * 1.75, max_bet) # Raise up to 1.5x pot
+            max_raise = min(game_state.pot * 1.25, max_bet) # Raise up to 1.5x pot
             if max_raise < min_bet:
                 max_raise = min_bet
                 
