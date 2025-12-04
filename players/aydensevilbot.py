@@ -16,6 +16,7 @@ class aydenbot(PokerBotAPI):
         super().__init__(name)
         self.hands_played = 0
         self.play_frequency = 0.8
+        self.goodenoughhand = False
 
         self.premium_hands = [
             (Rank.ACE, Rank.ACE), (Rank.KING, Rank.KING), (Rank.QUEEN, Rank.QUEEN),
@@ -27,7 +28,12 @@ class aydenbot(PokerBotAPI):
             (Rank.KING, Rank.JACK), (Rank.QUEEN, Rank.JACK), (Rank.JACK, Rank.TEN),
             (Rank.TEN, Rank.NINE), (Rank.NINE, Rank.EIGHT)
         ]  
-        self.multipleofsuite = False
+        self.high_pairs = [
+            (Rank.KING, Rank.KING), (Rank.QUEEN, Rank.QUEEN), (Rank.JACK, Rank.JACK),
+            (Rank.TEN, Rank.TEN)
+        ]
+
+
 
     
 
@@ -83,7 +89,23 @@ class aydenbot(PokerBotAPI):
         hand_type, _, _ = HandEvaluator.evaluate_best_hand(all_cards)
         hand_rank = HandEvaluator.HAND_RANKINGS[hand_type]
 
-        # Choose a random legal action
+        ace = 0
+        king = 0
+        queen = 0
+        jack = 0
+        self.goodenoughhand = False
+        for card in all_cards: #probably need this for later too
+            if card.rank == Rank.ACE: ace += 1
+            if card.rank == Rank.KING: king += 1
+            if card.rank == Rank.QUEEN: queen += 1
+            if card.rank == Rank.JACK: jack += 1
+
+        if ace > 1 or king > 1 or queen > 1 or jack > 1:
+            self.goodenoughhand = True
+            print("good enough pair ---------" + str(ace) + str(king) + str(queen) + str(jack))
+
+
+        # better than 2 pair
         if hand_rank >= HandEvaluator.HAND_RANKINGS['two_pair']:
             if PlayerAction.RAISE in legal_actions:
                 action = PlayerAction.RAISE
@@ -93,8 +115,22 @@ class aydenbot(PokerBotAPI):
                 action = PlayerAction.CHECK
             else:
                 action = random.choice(legal_actions)
+        elif self.goodenoughhand == True and hand_rank == HandEvaluator.HAND_RANKINGS['pair']: #specifically high card pairs
+            print("PAIR THAT IS GOOD MAYBE" + str(all_cards))
+            if PlayerAction.RAISE in legal_actions:
+                action = PlayerAction.RAISE
+            elif PlayerAction.ALL_IN in legal_actions: #60% all in
+                print("ALL IN LETs GOO")
+                action = PlayerAction.ALL_IN
+            elif PlayerAction.CALL in legal_actions:
+                action = PlayerAction.CALL
+            elif PlayerAction.CHECK in legal_actions:
+                action = PlayerAction.CHECK
+            else:
+                action = random.choice(legal_actions)
         else:
-            # original (change if win rate goes down)
+            # original (reset if win rate goes down)
+            # action = random.choice(legal_actions)
             if PlayerAction.FOLD in legal_actions:
                 action = PlayerAction.FOLD
             else:
