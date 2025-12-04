@@ -83,7 +83,7 @@ class aydenbot(PokerBotAPI):
             elif PlayerAction.CHECK in legal_actions:   
                 return PlayerAction.CHECK, 0
             else:
-                return PlayerAction.FOLD #fold if not good hand?
+                return PlayerAction.FOLD, 0 #fold if not good hand?
 
 
 
