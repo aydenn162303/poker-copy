@@ -66,7 +66,8 @@ class aydenbot(PokerBotAPI):
             if not (is_premium or is_suited_connector or is_pocket_pair):
                 if PlayerAction.CHECK in legal_actions:
                     return PlayerAction.CHECK, 0
-                return PlayerAction.FOLD, 0
+                else:
+                    return PlayerAction.FOLD, 0
                 
             # With a good hand, either raise or call
             if PlayerAction.RAISE in legal_actions:
