@@ -171,7 +171,7 @@ def run_many(num_tournaments=1000):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Run multiple poker tournaments.')
-    parser.add_argument('-n', '--count', type=int, default=1000, help='Number of tournaments to run')
+    parser.add_argument('-n', '--count', type=int, default=5000, help='Number of tournaments to run')
     args = parser.parse_args()
     
     try:
