@@ -12,11 +12,12 @@ def run_many(num_tournaments=1000):
     print(f"Running {num_tournaments} tournaments...")
     print("=" * 40)
     
-    # Disable logging to avoid spam and speed up execution
-    # We configure basicConfig with a NullHandler so TournamentRunner's basicConfig call does nothing.
-    logging.basicConfig(handlers=[logging.NullHandler()], level=logging.CRITICAL)
-    # Also force set level for existing loggers just in case
-    logging.getLogger().setLevel(logging.CRITICAL)
+    # Disable logging ONLY if running multiple tournaments to avoid spam
+    if num_tournaments > 1:
+        # We configure basicConfig with a NullHandler so TournamentRunner's basicConfig call does nothing.
+        logging.basicConfig(handlers=[logging.NullHandler()], level=logging.CRITICAL)
+        # Also force set level for existing loggers just in case
+        logging.getLogger().setLevel(logging.CRITICAL)
     
     # Default settings (matching run_tournament.py)
     settings = TournamentSettings(
@@ -45,26 +46,34 @@ def run_many(num_tournaments=1000):
         pool = num_players * entry_fee
         payouts = {} # position -> amount
         
-        if num_players < 8:
-            # Standard top 3 split for small tourneys
-            payouts[1] = int(pool * 0.50)
-            payouts[2] = int(pool * 0.30)
-            payouts[3] = int(pool * 0.20)
+        # Top-Heavy Payout Structures (Favoring 1st/2nd, Max Top 8)
+        if num_players <= 5:
+            # Winner takes all
+            percentages = [1.00]
+        elif num_players <= 6:
+            # Top 2 (70/30)
+            percentages = [0.70, 0.30]
+        elif num_players <= 10:
+            # Top 3 (55/30/15)
+            percentages = [0.55, 0.30, 0.15]
+        elif num_players <= 15:
+            # Top 4 (50/25/15/10)
+            percentages = [0.50, 0.25, 0.15, 0.10]
+        elif num_players <= 25:
+            # Top 5 (45/25/15/10/5)
+            percentages = [0.45, 0.25, 0.15, 0.10, 0.05]
+        elif num_players <= 30:
+            # Top 6 (42/24/14/10/6/4)
+            percentages = [0.42, 0.24, 0.14, 0.10, 0.06, 0.04]
+        elif num_players <= 49:
+            # Top 7 (40/22/14/10/7/4/3)
+            percentages = [0.40, 0.22, 0.14, 0.10, 0.07, 0.04, 0.03]
         else:
-            # 8th gets entry back
-            # 1-7 get entry back + share of excess
-            base_payout = 1000
-            excess = pool - (8 * base_payout)
+            # Top 8 (50+) (38/20/14/10/7/5/4/2)
+            percentages = [0.38, 0.20, 0.14, 0.10, 0.07, 0.05, 0.04, 0.02]
             
-            # Skewed weights for 1-7
-            weights = [45, 25, 15, 8, 4, 2, 1] # Sum = 100
-            
-            for i in range(7):
-                pos = i + 1
-                bonus = int(excess * (weights[i] / 100.0))
-                payouts[pos] = base_payout + bonus
-            
-            payouts[8] = base_payout
+        for i, pct in enumerate(percentages):
+            payouts[i + 1] = int(pool * pct)
             
         return payouts
 
