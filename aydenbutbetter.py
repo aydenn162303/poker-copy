@@ -19,13 +19,12 @@ class aydenbutbetter(PokerBotAPI):
         self.hands_played = 0
         self.hands_won = 0
         
-        # Define strong starting hands
         self.premium_hands = [
             (Rank.ACE, Rank.ACE), (Rank.KING, Rank.KING), (Rank.QUEEN, Rank.QUEEN),
         ]
 
-        self.maybestayingame_hands = [ # do later around line 62-66
-            (Rank.JACK, Rank.JACK), (Rank.ACE, Rank.KING)
+        self.premium_suit_hands = [ # seperate from top list, count as already in
+            (Rank.ACE, Rank.KING), (Rank.ACE, Rank.QUEEN), (Rank.ACE, Rank.JACK), (Rank.JACK, Rank.JACK)
         ]
         
     
