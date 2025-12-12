@@ -20,7 +20,7 @@ class ayden_random_copy(PokerBotAPI):
     def __init__(self, name: str):
         super().__init__(name)
         self.hands_played = 0
-
+        """
         do_not_play = [
             (Rank.ONE, Rank.ONE), (Rank.ONE, Rank.TWO), (Rank.TWO, Rank.TWO), (Rank.THREE, Rank.TWO),
             (Rank.THREE, Rank.THREE), (Rank.FOUR, Rank.THREE), (Rank.FOUR, Rank.FOUR), (Rank.FIVE, Rank.FOUR),
@@ -28,6 +28,7 @@ class ayden_random_copy(PokerBotAPI):
             (Rank.SIX, Rank.SIX), (Rank.SIX, Rank.SEVEN), (Rank.SEVEN, Rank.SEVEN), (Rank.EIGHT, Rank.SEVEN),
             (Rank.EIGHT, Rank.EIGHT), (Rank.EIGHT, Rank.NINE)
         ]
+        """
     
     def get_action(self, game_state: GameState, hole_cards: List[Card], 
                    legal_actions: List[PlayerAction], min_bet: int, max_bet: int) -> tuple:
