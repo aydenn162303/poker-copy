@@ -1,12 +1,13 @@
 {
   "final_standings": [
-    "('random_bot', 3014, 1)",
-    "('conservative_bot', 0, 2)",
-    "('aydenbutbetter', 0, 3)",
-    "('aggressive_bot', 0, 4)"
+    "('ayden_random_but_not_random', 2554, 1)",
+    "('aydenbutbetter', 0, 2)",
+    "('conservative_bot', 0, 3)",
+    "('random_bot', 0, 4)",
+    "('aggressive_bot', 0, 5)"
   ],
-  "tournament_duration": 0.01623392105102539,
-  "total_hands": 63,
+  "tournament_duration": 0.5640335083007812,
+  "total_hands": 136,
   "settings": {
     "starting_chips": 1000,
     "tournament_type": "freeze_out",
@@ -14,6 +15,13 @@
     "time_limit": 10.0
   },
   "bot_stats": {
+    "ayden_random_but_not_random": {
+      "error_count": 0,
+      "timeout_count": 0,
+      "is_disqualified": false,
+      "max_errors": 5,
+      "max_timeouts": 3
+    },
     "conservative_bot": {
       "error_count": 0,
       "timeout_count": 0,
