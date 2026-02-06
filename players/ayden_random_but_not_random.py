@@ -1,6 +1,7 @@
 """
-Random Bot - Makes random legal decisions
-This is a simple example bot for testing the tournament system
+https://poker.elliotd.net/
+Ayden1623
+h20&20
 """
 from typing import List, Dict, Any
 
